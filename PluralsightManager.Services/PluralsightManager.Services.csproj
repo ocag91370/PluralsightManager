@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{769DA51E-27BF-4F07-B1DF-F5527D4AA8E2}</ProjectGuid>
+    <ProjectGuid>{6DD25A38-62ED-413F-840B-72F3E00B6C7E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PluralsightManager.Repositories</RootNamespace>
-    <AssemblyName>PluralsightManager.Repositories</AssemblyName>
+    <RootNamespace>PluralsightManager.Services</RootNamespace>
+    <AssemblyName>PluralsightManager.Services</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,18 +37,11 @@
     <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -66,26 +57,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IPluralsightRepository.cs" />
-    <Compile Include="Entities\CourseEntity.cs" />
-    <Compile Include="DatabaseRepository_IDisposable.cs" />
-    <Compile Include="DatabaseRepository_IDatabaseRepository.cs" />
-    <Compile Include="DatabaseRepository.cs" />
-    <Compile Include="Contracts\IDatabaseRepository.cs" />
-    <Compile Include="PluralsightDbContext.cs" />
-    <Compile Include="PluralsightRepository.cs" />
+    <Compile Include="AutoMapperConfiguration.cs" />
+    <Compile Include="PluralsightService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterModule.cs" />
-    <Compile Include="Workaround.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PluralsightManager.Contracts\PluralsightManager.Contracts.csproj">
+      <Project>{c652b993-0c90-47f6-9c15-8c0930dd8eb0}</Project>
+      <Name>PluralsightManager.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PluralsightManager.Models\PluralsightManager.Models.csproj">
       <Project>{3222F5FD-9CF9-4A8A-876F-F118ACFF8562}</Project>
       <Name>PluralsightManager.Models</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\PluralsightManager.Repositories\PluralsightManager.Repositories.csproj">
+      <Project>{769DA51E-27BF-4F07-B1DF-F5527D4AA8E2}</Project>
+      <Name>PluralsightManager.Repositories</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

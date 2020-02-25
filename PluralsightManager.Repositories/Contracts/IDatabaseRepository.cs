@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PluralsightManager.Repositories.Contracts
 {
-    public interface IDbRepository : IDisposable
+    public interface IDatabaseRepository : IDisposable
     {
         #region Tables and Views functions
 

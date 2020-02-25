@@ -17,7 +17,7 @@ namespace PluralsightManager.Repositories
     /// More functions can be added if needed
     /// </summary>
     /// <typeparam name="TEntity">Entity Framework table or view</typeparam>
-    public partial class DbRepository : IDbRepository
+    public partial class DatabaseRepository : IDatabaseRepository
     {
         #region Tables and Views functions
 

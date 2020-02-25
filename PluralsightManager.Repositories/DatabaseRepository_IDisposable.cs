@@ -16,30 +16,11 @@ namespace PluralsightManager.Repositories
     /// More functions can be added if needed
     /// </summary>
     /// <typeparam name="TEntity">Entity Framework table or view</typeparam>
-    public partial class DbRepository : IDbRepository
+    public partial class DatabaseRepository : IDatabaseRepository
     {
-        #region Members
-
-        private readonly DbContext _dbContext;
-
-        #endregion
-
-        #region Implementation
-
-        /// <summary>
-        /// Repository constructor 
-        /// </summary>
-        /// <param name="dbContext">Entity framework database context</param>
-        public DbRepository(DbContext dbContext)
+        public void Dispose()
         {
-            _dbContext = dbContext;
+            //_dbContext.Dispose();
         }
-
-        private DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class
-        {
-            return _dbContext.Set<TEntity>();
-        }
-
-        #endregion
     }
 }

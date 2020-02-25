@@ -1,4 +1,4 @@
-﻿namespace PluralsightManager.Repositories
+﻿namespace PluralsightManager.Models.Models
 {
     public class CourseModel
     {

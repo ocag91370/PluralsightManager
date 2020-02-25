@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PluralsightManager.Repositories
+namespace PluralsightManager.Repositories.Entities
 {
     public class CourseEntity
     {
