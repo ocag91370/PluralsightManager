@@ -1,4 +1,5 @@
-﻿using PluralsightManager.Contracts;
+﻿using AutoMapper;
+using PluralsightManager.Contracts;
 using PluralsightManager.Models.Models;
 using PluralsightManager.Repositories.Contracts;
 using PluralsightManager.Repositories.Entities;
@@ -24,6 +25,14 @@ namespace PluralsightManager.Services
             var courses = _pluralsightRepository.GetAllCourses().ToList();
 
             return courses.MapTo<List<CourseEntity>, List<CourseModel>>();
+            //return courses.MapTo<List<CourseModel>>();
+        }
+
+        public IEnumerable<ModuleModel> GetAllModules()
+        {
+            var modules = _pluralsightRepository.GetAllModules().ToList();
+
+            return modules.MapTo<List<ModuleEntity>, List<ModuleModel>>();
         }
     }
 }

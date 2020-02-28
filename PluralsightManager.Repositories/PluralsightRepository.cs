@@ -33,13 +33,23 @@ namespace PluralsightManager.Repositories
         }
 
         /// <summary>
-        /// Selects Product By Id
+        /// Get all courses
         /// </summary>
         public IEnumerable<CourseEntity> GetAllCourses()
         {
-            var courses = _dbRepository.GetAll<CourseEntity>(true);
+            var result = _dbRepository.GetAll<CourseEntity>(true);
 
-            return courses;
+            return result;
+        }
+
+        /// <summary>
+        /// Get all modules
+        /// </summary>
+        public IEnumerable<ModuleEntity> GetAllModules()
+        {
+            var result = _dbRepository.GetAll<ModuleEntity>(true);
+
+            return result;
         }
     }
 }

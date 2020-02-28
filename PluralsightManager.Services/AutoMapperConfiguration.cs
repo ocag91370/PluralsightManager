@@ -9,18 +9,6 @@ using System.Threading.Tasks;
 
 namespace PluralsightManager.Services
 {
-    public static class MappingExtensions
-    {
-        public static TDestination MapTo<TSource, TDestination>(this TSource source)
-        {
-            return AutoMapperConfiguration.Mapper.Map<TSource, TDestination>(source);
-        }
-
-        public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination)
-        {
-            return AutoMapperConfiguration.Mapper.Map(source, destination);
-        }
-    }
 
     public static class AutoMapperConfiguration
     {
@@ -28,14 +16,12 @@ namespace PluralsightManager.Services
         {
             MapperConfiguration = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<ModuleEntity, ModuleModel>()
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ? src.DurationInMilliseconds.Value : 0)));
 
-                #region Post
-                // Mapping domain entities to view entities
-                cfg.CreateMap<CourseEntity, CourseModel>();
-                ;
-                // Mapping view entities to domain entities
-                //cfg.CreateMap<PostViewModel, Post>();
-                #endregion
+                cfg.CreateMap<CourseEntity, CourseModel>()
+                    .ForMember(dest => dest.HasTranscript, opt => opt.MapFrom(src => (src.HasTranscript.HasValue) ? Convert.ToBoolean(src.HasTranscript.Value) : false))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ?src.DurationInMilliseconds.Value :0)));
             });
 
             Mapper = MapperConfiguration.CreateMapper();

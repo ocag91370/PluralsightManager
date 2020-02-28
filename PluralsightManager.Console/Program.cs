@@ -23,6 +23,7 @@ namespace PluralsightManager.Console
 
             var pluralsightService = Container.Resolve<IPluralsightService>();
             var courses = pluralsightService.GetAllCourses().ToList();
+            var modules = pluralsightService.GetAllModules().ToList();
 
             return;
         }

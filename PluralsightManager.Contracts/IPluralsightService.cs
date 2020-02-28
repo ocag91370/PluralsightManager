@@ -6,5 +6,7 @@ namespace PluralsightManager.Contracts
     public interface IPluralsightService
     {
         IEnumerable<CourseModel> GetAllCourses();
+
+        IEnumerable<ModuleModel> GetAllModules();
     }
 }

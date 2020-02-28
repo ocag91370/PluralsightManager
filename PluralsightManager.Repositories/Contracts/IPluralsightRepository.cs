@@ -10,5 +10,7 @@ namespace PluralsightManager.Repositories.Contracts
     public interface IPluralsightRepository : IDisposable
     {
         IEnumerable<CourseEntity> GetAllCourses();
+
+        IEnumerable<ModuleEntity> GetAllModules();
     }
 }
