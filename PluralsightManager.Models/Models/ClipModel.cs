@@ -2,7 +2,7 @@
 
 namespace PluralsightManager.Models.Models
 {
-    public class ModuleModel
+    public class ClipModel
     {
         public double Id { get; set; }
 
@@ -12,10 +12,8 @@ namespace PluralsightManager.Models.Models
 
         public string Title { get; set; }
 
-        public string Description { get; set; }
-
         public TimeSpan Duration { get; set; }
 
-        public string CourseName { get; set; }
+        public double ModuleId { get; set; }
     }
 }

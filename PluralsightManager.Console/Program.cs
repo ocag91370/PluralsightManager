@@ -5,6 +5,7 @@ using PluralsightManager.Contracts;
 using PluralsightManager.Models.Models;
 using PluralsightManager.Repositories;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -24,6 +25,18 @@ namespace PluralsightManager.Console
             var pluralsightService = Container.Resolve<IPluralsightService>();
             var courses = pluralsightService.GetAllCourses().ToList();
             var modules = pluralsightService.GetAllModules().ToList();
+            var clips = pluralsightService.GetAllClips().ToList();
+
+            foreach (var course in pluralsightService.GetAllCourses().ToList())
+            {
+                foreach (var module in pluralsightService.GetModulesOfCourse(course.Name).ToList())
+                {
+                    foreach (var clip in pluralsightService.GetClipsOfModule(module.Id).ToList())
+                    {
+                        System.Console.WriteLine($"{course.Title} - {module.Index + 1}-{module.Title} - {clip.Index + 1}-{clip.Title}");
+                    }
+                }
+            }
 
             return;
         }

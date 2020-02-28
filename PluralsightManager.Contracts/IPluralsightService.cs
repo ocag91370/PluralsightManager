@@ -8,5 +8,9 @@ namespace PluralsightManager.Contracts
         IEnumerable<CourseModel> GetAllCourses();
 
         IEnumerable<ModuleModel> GetAllModules();
+        IEnumerable<ModuleModel> GetModulesOfCourse(string courseId);
+
+        IEnumerable<ClipModel> GetAllClips();
+        IEnumerable<ClipModel> GetClipsOfModule(double moduleId);
     }
 }

@@ -12,5 +12,7 @@ namespace PluralsightManager.Repositories.Contracts
         IEnumerable<CourseEntity> GetAllCourses();
 
         IEnumerable<ModuleEntity> GetAllModules();
+
+        IEnumerable<ClipEntity> GetAllClips();
     }
 }

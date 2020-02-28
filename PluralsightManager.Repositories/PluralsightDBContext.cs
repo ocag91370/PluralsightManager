@@ -19,6 +19,10 @@ namespace PluralsightManager.Repositories
             modelBuilder
                 .Entity<ModuleEntity>()
                 .ToTable("Module");
+
+            modelBuilder
+                .Entity<ClipEntity>()
+                .ToTable("Clip");
         }
     }
 }

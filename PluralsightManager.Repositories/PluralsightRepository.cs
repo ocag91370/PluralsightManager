@@ -51,5 +51,15 @@ namespace PluralsightManager.Repositories
 
             return result;
         }
+
+        /// <summary>
+        /// Get all clips
+        /// </summary>
+        public IEnumerable<ClipEntity> GetAllClips()
+        {
+            var result = _dbRepository.GetAll<ClipEntity>(true);
+
+            return result;
+        }
     }
 }
