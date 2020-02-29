@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PluralsightManager.Models.Models
 {
@@ -17,5 +18,9 @@ namespace PluralsightManager.Models.Models
         public TimeSpan Duration { get; set; }
 
         public string CourseName { get; set; }
+
+        public string AuthorHandle { get; set; }
+
+        public virtual ICollection<ClipModel> Clips { get; set; }
     }
 }

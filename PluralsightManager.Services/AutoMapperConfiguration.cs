@@ -17,14 +17,17 @@ namespace PluralsightManager.Services
             MapperConfiguration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CourseEntity, CourseModel>()
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Trim()))
                     .ForMember(dest => dest.HasTranscript, opt => opt.MapFrom(src => (src.HasTranscript.HasValue) ? Convert.ToBoolean(src.HasTranscript.Value) : false))
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ?src.DurationInMilliseconds.Value :0)));
 
                 cfg.CreateMap<ModuleEntity, ModuleModel>()
                     .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.ModuleIndex))
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Trim()))
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ? src.DurationInMilliseconds.Value : 0)));
 
                 cfg.CreateMap<ClipEntity, ClipModel>()
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Trim()))
                     .ForMember(dest => dest.ModuleId, opt => opt.MapFrom(src => src.ModuleId.Value))
                     .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.ClipIndex))
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ? src.DurationInMilliseconds.Value : 0)));

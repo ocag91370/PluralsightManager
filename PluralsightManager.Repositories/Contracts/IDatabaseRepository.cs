@@ -9,6 +9,7 @@ namespace PluralsightManager.Repositories.Contracts
     {
         #region Tables and Views functions
 
+        TResult Get<TResult>(params object[] keyValues) where TResult : class;
         IQueryable<TResult> GetAll<TResult>(bool noTracking = true) where TResult : class;
         TEntity Add<TEntity>(TEntity entity) where TEntity : class;
         TEntity Delete<TEntity>(TEntity entity) where TEntity : class;

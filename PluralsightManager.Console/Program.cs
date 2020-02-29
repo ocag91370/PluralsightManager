@@ -2,9 +2,11 @@
 using Autofac.Integration.Mvc;
 using AutoMapper;
 using PluralsightManager.Contracts;
+using PluralsightManager.Models;
 using PluralsightManager.Models.Models;
 using PluralsightManager.Repositories;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,29 +25,23 @@ namespace PluralsightManager.Console
             RegisterAutoMapper();
 
             var pluralsightService = Container.Resolve<IPluralsightService>();
-            var courses = pluralsightService.GetAllCourses().ToList();
-            var modules = pluralsightService.GetAllModules().ToList();
-            var clips = pluralsightService.GetAllClips().ToList();
 
-            foreach (var course in pluralsightService.GetAllCourses().ToList())
-            {
-                foreach (var module in pluralsightService.GetModulesOfCourse(course.Name).ToList())
-                {
-                    foreach (var clip in pluralsightService.GetClipsOfModule(module.Id).ToList())
-                    {
-                        System.Console.WriteLine($"{course.Title} - {module.Index + 1}-{module.Title} - {clip.Index + 1}-{clip.Title}");
-                    }
-                }
-            }
-
-            return;
+            var course = pluralsightService.DownloadCourse("636041d7-7b62-4dfd-9341-3712ac58f6d0");
         }
 
         static void RegisterAutofac()
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<PluralsightManager.Services.RegisterModule>();
+            var configuration = new PluralsightConfiguration
+            {
+                InputPath = ConfigurationManager.AppSettings["InputPath"],
+                VideoFolder = ConfigurationManager.AppSettings["VideoFolder"],
+                OutputPath = ConfigurationManager.AppSettings["OutputPath"]
+            };
+
+            builder.RegisterModule(new PluralsightManager.Services.RegisterModule(configuration));
+            //builder.RegisterModule<PluralsightManager.Services.RegisterModule>();
 
             Container = builder.Build();
 

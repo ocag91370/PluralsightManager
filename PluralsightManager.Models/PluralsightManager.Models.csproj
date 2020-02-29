@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\FolderModel.cs" />
+    <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\ClipModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="Models\CourseModel.cs" />
+    <Compile Include="PluralsightConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

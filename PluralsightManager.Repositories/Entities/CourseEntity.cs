@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
@@ -36,5 +37,7 @@ namespace PluralsightManager.Repositories.Entities
         public string CachedOn { get; set; }
 
         public string UrlSlug { get; set; }
+
+        public virtual ICollection<ModuleEntity> Modules { get; set; }
     }
 }

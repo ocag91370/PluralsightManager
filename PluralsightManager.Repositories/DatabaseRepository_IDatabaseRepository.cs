@@ -10,7 +10,7 @@ namespace PluralsightManager.Repositories
 {
     /// <summary>
     /// Implementing basic tables, views, procedures, functions, and transaction functions
-    /// Select (GetAll), Insert (Add), Delete, and Attach
+    /// Select (Get, GetAll), Insert (Add), Delete, and Attach
     /// No Edit (Modify) function (can modify attached entity without function call)
     /// Executes database procedures or functions (Execute)
     /// Transaction functions (Commit)
@@ -20,6 +20,16 @@ namespace PluralsightManager.Repositories
     public partial class DatabaseRepository : IDatabaseRepository
     {
         #region Tables and Views functions
+
+        /// <summary>
+        /// Retrieve a specific entity
+        /// </summary>
+        public virtual TResult Get<TResult>(params object[] keyValues) where TResult : class
+        {
+            var entity = GetDbSet<TResult>().Find(keyValues);
+
+            return entity;
+        }
 
         /// <summary>
         /// Query all

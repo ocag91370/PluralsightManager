@@ -22,5 +22,7 @@ namespace PluralsightManager.Repositories.Entities
         public double? SupportsWidescreen { get; set; }
 
         public double? ModuleId { get; set; }
-    }
+
+        public virtual ModuleEntity Module { get; set; }
+}
 }

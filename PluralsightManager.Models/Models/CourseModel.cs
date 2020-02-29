@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PluralsightManager.Models.Models
 {
@@ -17,5 +18,7 @@ namespace PluralsightManager.Models.Models
         public TimeSpan Duration { get; set; }
 
         public string UrlSlug { get; set; }
+
+        public virtual ICollection<ModuleModel> Modules { get; set; }
     }
 }

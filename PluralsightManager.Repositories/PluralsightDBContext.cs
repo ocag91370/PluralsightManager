@@ -14,11 +14,13 @@ namespace PluralsightManager.Repositories
         {
             modelBuilder
                 .Entity<CourseEntity>()
-                .ToTable("Course");
+                .ToTable("Course")
+                .HasMany(t => t.Modules);
 
             modelBuilder
                 .Entity<ModuleEntity>()
-                .ToTable("Module");
+                .ToTable("Module")
+                .HasMany(t => t.Clips);
 
             modelBuilder
                 .Entity<ClipEntity>()

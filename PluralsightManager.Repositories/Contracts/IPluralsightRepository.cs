@@ -1,4 +1,5 @@
-﻿using PluralsightManager.Repositories.Entities;
+﻿using PluralsightManager.Models.Models;
+using PluralsightManager.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace PluralsightManager.Repositories.Contracts
 {
     public interface IPluralsightRepository : IDisposable
     {
+        CourseEntity GetCourse(string courseId);
+
         IEnumerable<CourseEntity> GetAllCourses();
 
         IEnumerable<ModuleEntity> GetAllModules();

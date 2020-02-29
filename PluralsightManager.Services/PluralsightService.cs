@@ -3,8 +3,11 @@ using PluralsightManager.Contracts;
 using PluralsightManager.Models.Models;
 using PluralsightManager.Repositories.Contracts;
 using PluralsightManager.Repositories.Entities;
+using PluralsightManager.Services.Contracts;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +16,46 @@ namespace PluralsightManager.Services
 {
     public class PluralsightService : IPluralsightService
     {
-        private IPluralsightRepository _pluralsightRepository;
+        private readonly IPluralsightRepository _pluralsightRepository;
+        private readonly IFolderManager _folderManager;
+        private readonly IVideoManager _videoManager;
 
-        public PluralsightService(IPluralsightRepository pluralsightRepository)
+        public PluralsightService(IPluralsightRepository pluralsightRepository, IFolderManager folderManager, IVideoManager videoManager)
         {
             _pluralsightRepository = pluralsightRepository;
+            _folderManager = folderManager;
+            _videoManager = videoManager;
+        }
+
+        /// <summary>
+        /// Download a course
+        /// </summary>
+        /// <param name="courseId">Id of the course</param>
+        /// <returns>The status and datas of the course</returns>
+        public ResultModel<CourseModel> DownloadCourse(string courseId)
+        {
+            var courseResult = _pluralsightRepository
+                .GetCourse(courseId)
+                .Map<CourseEntity, CourseModel>();
+
+            var folders = _folderManager.CreateFolders(courseResult.Data);
+            var downloadStatus = _videoManager.DownloadCourse(folders);
+
+            return courseResult;
+        }
+
+        /// <summary>
+        /// Get a course
+        /// </summary>
+        /// <param name="courseId">Id of the course</param>
+        /// <returns>The status and datas of the course</returns>
+        public ResultModel<CourseModel> GetCourse(string courseId)
+        {
+            var result = _pluralsightRepository
+                            .GetCourse(courseId)
+                            .Map<CourseEntity, CourseModel>();
+
+            return result;
         }
 
         /// <summary>
