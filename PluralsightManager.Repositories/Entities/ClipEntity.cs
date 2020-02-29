@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
@@ -24,5 +25,7 @@ namespace PluralsightManager.Repositories.Entities
         public double? ModuleId { get; set; }
 
         public virtual ModuleEntity Module { get; set; }
-}
+
+        public virtual ICollection<ClipTranscriptEntity> Transcripts { get; set; }
+    }
 }

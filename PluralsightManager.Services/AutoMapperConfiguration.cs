@@ -31,6 +31,10 @@ namespace PluralsightManager.Services
                     .ForMember(dest => dest.ModuleId, opt => opt.MapFrom(src => src.ModuleId.Value))
                     .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.ClipIndex))
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.DurationInMilliseconds.HasValue) ? src.DurationInMilliseconds.Value : 0)));
+
+                cfg.CreateMap<ClipTranscriptEntity, ClipTranscriptModel>()
+                    .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.StartTime.HasValue) ? src.StartTime.Value : 0)))
+                    .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => TimeSpan.FromMilliseconds((src.EndTime.HasValue) ? src.EndTime.Value : 0)));
             });
 
             Mapper = MapperConfiguration.CreateMapper();

@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IPluralsightRepository.cs" />
+    <Compile Include="Entities\ClipTranscriptEntity.cs" />
     <Compile Include="Entities\ClipEntity.cs" />
     <Compile Include="Entities\ModuleEntity.cs" />
     <Compile Include="Entities\CourseEntity.cs" />
