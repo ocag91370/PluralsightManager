@@ -41,7 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICourseFolderService.cs" />
+    <Compile Include="IDirectoryService.cs" />
+    <Compile Include="IConsoleService.cs" />
     <Compile Include="IPluralsightService.cs" />
+    <Compile Include="ICourseVideoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

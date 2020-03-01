@@ -19,17 +19,25 @@ namespace PluralsightManager.Services
             builder.RegisterModule(new PluralsightManager.Repositories.RegisterModule());
 
             builder
+                .RegisterType<ConsoleService>()
+                .As<IConsoleService>();
+
+            builder
+                .RegisterType<DirectoryService>()
+                .As<IDirectoryService>();
+
+            builder
                 .RegisterType<PluralsightService>()
                 .As<IPluralsightService>();
 
             builder
-                .RegisterType<FolderManager>()
-                .As<IFolderManager>()
+                .RegisterType<CourseFolderService>()
+                .As<ICourseFolderService>()
                 .WithParameter("configuration", _configuration);
 
             builder
-                .RegisterType<VideoManager>()
-                .As<IVideoManager>()
+                .RegisterType<CourseVideoService>()
+                .As<ICourseVideoService>()
                 .WithParameter("configuration", _configuration);
         }
     }

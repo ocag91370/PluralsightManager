@@ -17,14 +17,34 @@ namespace PluralsightManager.Services
     public class PluralsightService : IPluralsightService
     {
         private readonly IPluralsightRepository _pluralsightRepository;
-        private readonly IFolderManager _folderManager;
-        private readonly IVideoManager _videoManager;
+        private readonly ICourseFolderService _courseFolderService;
+        private readonly ICourseVideoService _courseVideoService;
 
-        public PluralsightService(IPluralsightRepository pluralsightRepository, IFolderManager folderManager, IVideoManager videoManager)
+        public PluralsightService(IPluralsightRepository pluralsightRepository, ICourseFolderService folderManager, ICourseVideoService courseVideoService)
         {
             _pluralsightRepository = pluralsightRepository;
-            _folderManager = folderManager;
-            _videoManager = videoManager;
+            _courseFolderService = folderManager;
+            _courseVideoService = courseVideoService;
+        }
+        /// <summary>
+        /// Download a course
+        /// </summary>
+        /// <param name="courseId">Id of the course</param>
+        /// <returns>The status and datas of the course</returns>
+        public ResultModel<List<CourseModel>> DownloadAllCourses()
+        {
+                var coursesResult = _pluralsightRepository
+                .GetAllCourses()
+                .ToList()
+                .Map<List<CourseEntity>, List<CourseModel>>();
+
+            foreach (var course in coursesResult.Data)
+            {
+                var folders = _courseFolderService.CreateFolders(course);
+                var downloadStatus = _courseVideoService.DownloadCourse(folders);
+            }
+
+            return coursesResult;
         }
 
         /// <summary>
@@ -38,8 +58,8 @@ namespace PluralsightManager.Services
                 .GetCourse(courseId)
                 .Map<CourseEntity, CourseModel>();
 
-            var folders = _folderManager.CreateFolders(courseResult.Data);
-            var downloadStatus = _videoManager.DownloadCourse(folders);
+            var folders = _courseFolderService.CreateFolders(courseResult.Data);
+            var downloadStatus = _courseVideoService.DownloadCourse(folders);
 
             return courseResult;
         }

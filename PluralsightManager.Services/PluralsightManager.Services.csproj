@@ -59,11 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperConfiguration.cs" />
-    <Compile Include="Contracts\IFolderManager.cs" />
+    <Compile Include="ConsoleService.cs" />
     <Compile Include="Contracts\ITranscriptManager.cs" />
-    <Compile Include="Contracts\IVideoManager.cs" />
-    <Compile Include="VideoManager.cs" />
-    <Compile Include="FolderManager.cs" />
+    <Compile Include="CourseFolderService_ICourseFolderService.cs" />
+    <Compile Include="CourseVideoService_ICourseVideoService.cs" />
+    <Compile Include="DirectoryService_IDirectoryService.cs" />
+    <Compile Include="DirectoryService.cs" />
+    <Compile Include="CourseVideoService.cs" />
+    <Compile Include="CourseFolderService.cs" />
     <Compile Include="Encryption\IPsStream.cs" />
     <Compile Include="Encryption\PsStream.cs" />
     <Compile Include="Encryption\VideoEncryption.cs" />

@@ -1,9 +1,9 @@
 ﻿using PluralsightManager.Models.Models;
 using System.Collections.Generic;
 
-namespace PluralsightManager.Services.Contracts
+namespace PluralsightManager.Contracts
 {
-    public interface IFolderManager
+    public interface ICourseFolderService
     {
         List<FolderModel> CreateFolders(CourseModel courseModel);
     }

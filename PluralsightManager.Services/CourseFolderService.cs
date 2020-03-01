@@ -1,7 +1,7 @@
 ﻿using DecryptPluralSightVideos.Encryption;
+using PluralsightManager.Contracts;
 using PluralsightManager.Models;
 using PluralsightManager.Models.Models;
-using PluralsightManager.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,32 +14,18 @@ using System.Threading.Tasks;
 
 namespace PluralsightManager.Services
 {
-    public class FolderManager : IFolderManager
+    public partial class CourseFolderService : ICourseFolderService
     {
         private readonly PluralsightConfiguration _configuration;
+        private readonly IDirectoryService _directoryService;
 
-        private readonly List<char> _invalidCharacters = new List<char>();
-
-        public FolderManager(PluralsightConfiguration configuration)
+        public CourseFolderService(PluralsightConfiguration configuration, IDirectoryService directoryService)
         {
             _configuration = configuration;
-
-            _invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidPathChars());
-            _invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidFileNameChars());
-            _invalidCharacters.AddRange((IEnumerable<char>)new char[] { ':', '?', '"', '\\', '/' });
+            _directoryService = directoryService;
         }
 
-        private string CleanPath(string path)
-        {
-            var result = new StringBuilder(path);
-
-            foreach (var invalidCharacter in _invalidCharacters)
-                result = result.Replace(invalidCharacter, '-');
-
-            return result.ToString();
-        }
-
-        public string ModuleHash(string moduleName, string moduleAuthorName)
+        private string ModuleHash(string moduleName, string moduleAuthorName)
         {
             string s = moduleName + "|" + moduleAuthorName;
             using (var md5 = MD5.Create())
@@ -50,7 +36,7 @@ namespace PluralsightManager.Services
         {
             var result = new List<FolderModel>();
 
-            var courseFolder = CleanPath(course.Title);
+            var courseFolder = _directoryService.CleanFolderName(course.Title);
             string coursePath = Path.Combine(_configuration.OutputPath, courseFolder);
 
             int modulePadding = (course.Modules.Count / 10).ToString().Length;
@@ -59,7 +45,7 @@ namespace PluralsightManager.Services
             foreach (var module in course.Modules)
             {
                 var moduleIndex = module.Index + 1;
-                string moduleFolder = CleanPath($"{moduleIndex.ToString().PadLeft(modulePadding, '0')} - {module.Title}");
+                string moduleFolder = _directoryService.CleanFolderName($"{moduleIndex.ToString().PadLeft(modulePadding, '0')} - {module.Title}");
                 var modulePath = Path.Combine(coursePath, moduleFolder);
 
                 foreach (var clip in module.Clips)
@@ -69,9 +55,10 @@ namespace PluralsightManager.Services
                     var inputFolder = Path.Combine(course.Name, ModuleHash(module.Name, module.AuthorHandle));
                     var inputFilename = $"{clip.Name}.psv";
                     var outputFolder = Path.Combine(courseFolder, moduleFolder);
-                    var outputFilename = CleanPath($"{clipIndex.ToString().PadLeft(clipPadding, '0')} - {clip.Title}.mp4");
+                    var outputFilename = _directoryService.CleanFolderName($"{clipIndex.ToString().PadLeft(clipPadding, '0')} - {clip.Title}.mp4");
 
-                    result.Add(new FolderModel {
+                    result.Add(new FolderModel
+                    {
                         CourseName = course.Name,
                         ModuleName = module.Name,
                         ClipName = clip.Name,
@@ -90,38 +77,19 @@ namespace PluralsightManager.Services
         {
             string coursePath = Path.Combine(_configuration.OutputPath, courseFolder);
 
-            // Purge the existing folder
-            if (Directory.Exists(coursePath))
-                Directory.Delete(coursePath, true);
+            // Delete the course, if exists
+            _directoryService.Delete(coursePath);
 
             foreach (var folder in folders)
             {
                 var modulePath = Path.Combine(_configuration.OutputPath, folder.OutputFolder);
 
                 // Create the module folder
-                if (! Directory.Exists(modulePath))
-                    Directory.CreateDirectory(modulePath);
-
-                if (!Directory.Exists(modulePath))
-                {
-                    //Directory.Delete(coursePath);
+                if (!_directoryService.Create(modulePath))
                     return false;
-                }
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Download a course
-        /// </summary>
-        /// <param name="courseModel">The course model</param>
-        public List<FolderModel> CreateFolders(CourseModel courseModel)
-        {
-            var folders = ComputeFolders(courseModel);
-            CreateFolders(courseModel.Title, folders);
-
-            return folders;
         }
     }
 }
