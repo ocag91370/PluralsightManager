@@ -62,6 +62,8 @@
     <Compile Include="ConsoleService.cs" />
     <Compile Include="Contracts\ITranscriptManager.cs" />
     <Compile Include="CourseFolderService_ICourseFolderService.cs" />
+    <Compile Include="CourseTranscriptService.cs" />
+    <Compile Include="CourseTranscriptService_ICourseTranscriptService.cs" />
     <Compile Include="CourseVideoService_ICourseVideoService.cs" />
     <Compile Include="DirectoryService_IDirectoryService.cs" />
     <Compile Include="DirectoryService.cs" />

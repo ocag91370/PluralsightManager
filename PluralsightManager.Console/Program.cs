@@ -38,7 +38,9 @@ namespace PluralsightManager.Console
             {
                 InputPath = ConfigurationManager.AppSettings["InputPath"],
                 VideoFolder = ConfigurationManager.AppSettings["VideoFolder"],
-                OutputPath = ConfigurationManager.AppSettings["OutputPath"]
+                OutputPath = ConfigurationManager.AppSettings["OutputPath"],
+                VideoFileExtension = ConfigurationManager.AppSettings["VideoFileExtension"],
+                TranscriptFileExtension = ConfigurationManager.AppSettings["TranscriptFileExtension"]
             };
 
             builder.RegisterModule(new PluralsightManager.Services.RegisterModule(configuration));

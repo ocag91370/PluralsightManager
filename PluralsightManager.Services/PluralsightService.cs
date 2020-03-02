@@ -19,13 +19,16 @@ namespace PluralsightManager.Services
         private readonly IPluralsightRepository _pluralsightRepository;
         private readonly ICourseFolderService _courseFolderService;
         private readonly ICourseVideoService _courseVideoService;
+        private readonly ICourseTranscriptService _courseTranscriptService;
 
-        public PluralsightService(IPluralsightRepository pluralsightRepository, ICourseFolderService folderManager, ICourseVideoService courseVideoService)
+        public PluralsightService(IPluralsightRepository pluralsightRepository, ICourseFolderService folderManager, ICourseVideoService courseVideoService, ICourseTranscriptService courseTranscriptService)
         {
             _pluralsightRepository = pluralsightRepository;
             _courseFolderService = folderManager;
             _courseVideoService = courseVideoService;
+            _courseTranscriptService = courseTranscriptService;
         }
+
         /// <summary>
         /// Download a course
         /// </summary>
@@ -41,7 +44,11 @@ namespace PluralsightManager.Services
             foreach (var course in coursesResult.Data)
             {
                 var folders = _courseFolderService.CreateFolders(course);
-                var downloadStatus = _courseVideoService.DownloadCourse(folders);
+
+                var downloadideosStatus = _courseVideoService.Download(folders);
+
+                var transcripts = course.Modules.SelectMany(m => m.Clips.SelectMany(c => c.Transcripts));
+                //var downloadTranscriptsStatus = _courseTranscriptService.Download(transcripts, folders);
             }
 
             return coursesResult;
@@ -59,7 +66,7 @@ namespace PluralsightManager.Services
                 .Map<CourseEntity, CourseModel>();
 
             var folders = _courseFolderService.CreateFolders(courseResult.Data);
-            var downloadStatus = _courseVideoService.DownloadCourse(folders);
+            var downloadStatus = _courseVideoService.Download(folders);
 
             return courseResult;
         }

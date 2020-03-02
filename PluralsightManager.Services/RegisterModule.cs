@@ -39,6 +39,11 @@ namespace PluralsightManager.Services
                 .RegisterType<CourseVideoService>()
                 .As<ICourseVideoService>()
                 .WithParameter("configuration", _configuration);
+
+            builder
+                .RegisterType<CourseTranscriptService>()
+                .As<ICourseTranscriptService>()
+                .WithParameter("configuration", _configuration);
         }
     }
 }

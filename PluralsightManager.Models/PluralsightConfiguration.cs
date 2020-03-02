@@ -13,5 +13,9 @@ namespace PluralsightManager.Models
         public string InputPath { get; set; }
 
         public string VideoFolder { get; set; }
+
+        public string VideoFileExtension { get; set; }
+
+        public string TranscriptFileExtension { get; set; }
     }
 }

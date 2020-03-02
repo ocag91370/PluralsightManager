@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICourseFolderService.cs" />
+    <Compile Include="ICourseTranscriptService.cs" />
     <Compile Include="IDirectoryService.cs" />
     <Compile Include="IConsoleService.cs" />
     <Compile Include="IPluralsightService.cs" />

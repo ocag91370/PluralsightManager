@@ -52,20 +52,19 @@ namespace PluralsightManager.Services
                 {
                     var clipIndex = clip.Index + 1;
 
-                    var inputFolder = Path.Combine(course.Name, ModuleHash(module.Name, module.AuthorHandle));
-                    var inputFilename = $"{clip.Name}.psv";
-                    var outputFolder = Path.Combine(courseFolder, moduleFolder);
-                    var outputFilename = _directoryService.CleanFolderName($"{clipIndex.ToString().PadLeft(clipPadding, '0')} - {clip.Title}.mp4");
-
                     result.Add(new FolderModel
                     {
                         CourseName = course.Name,
                         ModuleName = module.Name,
                         ClipName = clip.Name,
-                        InputFolder = inputFolder,
-                        InputFilename = inputFilename,
-                        OutputFolder = outputFolder,
-                        OutputFilename = outputFilename
+                        Input = new FileModel {
+                            Folder = Path.Combine(course.Name, ModuleHash(module.Name, module.AuthorHandle)),
+                            Filename = $"{clip.Name}.psv"
+                        },
+                        Output = new FileModel {
+                            Folder = Path.Combine(courseFolder, moduleFolder),
+                            Filename = _directoryService.CleanFolderName($"{clipIndex.ToString().PadLeft(clipPadding, '0')} - {clip.Title}")
+                        }
                     });
                 }
             }
@@ -82,7 +81,7 @@ namespace PluralsightManager.Services
 
             foreach (var folder in folders)
             {
-                var modulePath = Path.Combine(_configuration.OutputPath, folder.OutputFolder);
+                var modulePath = Path.Combine(_configuration.OutputPath, folder.Output.Folder);
 
                 // Create the module folder
                 if (!_directoryService.Create(modulePath))

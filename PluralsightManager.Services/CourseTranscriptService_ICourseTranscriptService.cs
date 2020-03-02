@@ -12,21 +12,26 @@ using System.Threading.Tasks;
 
 namespace PluralsightManager.Services
 {
-    public partial class CourseVideoService : ICourseVideoService
+    public partial class CourseTranscriptService : ICourseTranscriptService
     {
-        public bool Download(List<FolderModel> folders)
+        public bool Download(List<FolderModel> folders, List<TranscriptModel> transcripts)
         {
             var result = true;
 
-            Parallel.ForEach(folders, folder => Download(folder));
+            Parallel.ForEach(folders, folder =>
+            {
+                var folderTranscripts = transcripts.Select(t => t.Clip.Name == folder.ClipName);
+                if (transcripts.Any())
+                    Download(folder, transcripts);
+            });
 
             return result;
         }
 
-        public bool Download(FolderModel folder)
+        public bool Download(FolderModel folder, List<TranscriptModel> transcripts)
         {
             var inputPath = Path.Combine(_configuration.InputPath, _configuration.VideoFolder, folder.Input.Folder, folder.Input.Filename);
-            var outputPath = Path.Combine(_configuration.OutputPath, folder.Output.Folder, $"{folder.Output.Filename}{ _configuration.VideoFileExtension}");
+            var outputPath = Path.Combine(_configuration.OutputPath, folder.Output.Folder, folder.Output.Filename);
 
             if (File.Exists(inputPath))
             {

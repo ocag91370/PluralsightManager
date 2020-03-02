@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ClipTranscriptModel.cs" />
+    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\TranscriptModel.cs" />
     <Compile Include="Models\FolderModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\ClipModel.cs" />

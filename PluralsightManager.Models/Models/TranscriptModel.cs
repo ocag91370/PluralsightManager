@@ -2,7 +2,7 @@
 
 namespace PluralsightManager.Models.Models
 {
-    public class ClipTranscriptModel
+    public class TranscriptModel
     {
         public double Id { get; set; }
 

@@ -10,12 +10,12 @@ namespace PluralsightManager.Models.Models
 
         public string ClipName { get; set; }
 
-        public string InputFolder { get; set; }
+        public FileModel Input { get; set; }
 
-        public string InputFilename { get; set; }
+        public FileModel Output { get; set; }
 
-        public string OutputFolder { get; set; }
+        public string VideoExtension { get; set; }
 
-        public string OutputFilename { get; set; }
+        public string TranscriptExtension { get; set; }
     }
 }

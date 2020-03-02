@@ -17,6 +17,6 @@ namespace PluralsightManager.Models.Models
 
         public double ModuleId { get; set; }
 
-        public virtual ICollection<ClipTranscriptModel> Transcripts { get; set; }
+        public virtual ICollection<TranscriptModel> Transcripts { get; set; }
     }
 }
