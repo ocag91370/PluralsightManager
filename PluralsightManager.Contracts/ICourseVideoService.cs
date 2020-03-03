@@ -5,8 +5,10 @@ namespace PluralsightManager.Contracts
 {
     public interface ICourseVideoService
     {
-        bool Download(List<FolderModel> folders);
+        bool DownloadCourse(CourseModel course, List<FolderModel> folders);
 
-        bool Download(FolderModel folder);
+        bool DownloadModule(ModuleModel module, List<FolderModel> folders);
+
+        bool DownloadClip(ClipModel clip, FolderModel folder);
     }
 }

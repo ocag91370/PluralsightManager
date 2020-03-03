@@ -9,6 +9,8 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PluralsightManager.Services
 {
@@ -24,6 +26,13 @@ namespace PluralsightManager.Services
             _consoleService = consoleService;
         }
 
+        private string ModuleHash(string moduleName, string moduleAuthorName)
+        {
+            string s = moduleName + "|" + moduleAuthorName;
+            using (var md5 = MD5.Create())
+                return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace('/', '_');
+        }
+
         private IStream ExtractVideo(string inputPath)
         {
             try
@@ -37,28 +46,43 @@ namespace PluralsightManager.Services
             {
                 _consoleService.Log(LogType.Error, $"An error occured during the extraction of the video : {ex.Message}");
 
-                return null;
+                throw ex;
             }
         }
 
-        private bool DecryptVideo(IStream curStream, string outputPath)
+        private byte[] DecryptVideo(IStream curStream)
         {
             try
             {
                 curStream.Stat(out var pstatstg, 0);
-                IntPtr pcbRead = (IntPtr)0;
-                int cbSize = (int)pstatstg.cbSize;
-                byte[] numArray = new byte[cbSize];
+                var pcbRead = (IntPtr)0;
+                var cbSize = (int)pstatstg.cbSize;
+                var numArray = new byte[cbSize];
                 curStream.Read(numArray, cbSize, pcbRead);
-                File.WriteAllBytes(outputPath, numArray);
 
-                return true;
+                return numArray;
             }
             catch (Exception ex)
             {
                 _consoleService.Log(LogType.Error, $"An error occured during the decryption of the video : {ex.Message}");
 
-                return false;
+                throw ex;
+            }
+        }
+
+        private bool SaveVideo(byte[] video, string outputPath)
+        {
+            try
+            {
+                File.WriteAllBytes(outputPath, video);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _consoleService.Log(LogType.Error, $"An error occured during the saving of the video : {ex.Message}");
+
+                throw ex;
             }
         }
     }

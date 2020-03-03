@@ -20,9 +20,12 @@ namespace PluralsightManager.Services
         private readonly ICourseFolderService _courseFolderService;
         private readonly ICourseVideoService _courseVideoService;
         private readonly ICourseTranscriptService _courseTranscriptService;
+        private readonly IConsoleService _consoleService;
 
-        public PluralsightService(IPluralsightRepository pluralsightRepository, ICourseFolderService folderManager, ICourseVideoService courseVideoService, ICourseTranscriptService courseTranscriptService)
+        public PluralsightService(IPluralsightRepository pluralsightRepository, ICourseFolderService folderManager, ICourseVideoService courseVideoService, ICourseTranscriptService courseTranscriptService, IConsoleService consoleService)
         {
+            _consoleService = consoleService;
+
             _pluralsightRepository = pluralsightRepository;
             _courseFolderService = folderManager;
             _courseVideoService = courseVideoService;
@@ -36,20 +39,12 @@ namespace PluralsightManager.Services
         /// <returns>The status and datas of the course</returns>
         public ResultModel<List<CourseModel>> DownloadAllCourses()
         {
-                var coursesResult = _pluralsightRepository
-                .GetAllCourses()
-                .ToList()
-                .Map<List<CourseEntity>, List<CourseModel>>();
+            var coursesResult = _pluralsightRepository
+            .GetAllCourses()
+            .ToList()
+            .Map<List<CourseEntity>, List<CourseModel>>();
 
-            foreach (var course in coursesResult.Data)
-            {
-                var folders = _courseFolderService.CreateFolders(course);
-
-                var downloadideosStatus = _courseVideoService.Download(folders);
-
-                var transcripts = course.Modules.SelectMany(m => m.Clips.SelectMany(c => c.Transcripts));
-                //var downloadTranscriptsStatus = _courseTranscriptService.Download(transcripts, folders);
-            }
+            Parallel.ForEach(coursesResult.Data, course => DownloadCourse(course));
 
             return coursesResult;
         }
@@ -65,10 +60,28 @@ namespace PluralsightManager.Services
                 .GetCourse(courseId)
                 .Map<CourseEntity, CourseModel>();
 
-            var folders = _courseFolderService.CreateFolders(courseResult.Data);
-            var downloadStatus = _courseVideoService.Download(folders);
+            return DownloadCourse(courseResult.Data);
+        }
 
-            return courseResult;
+        /// <summary>
+        /// Download a course
+        /// </summary>
+        /// <param name="course">course to be downloaded</param>
+        /// <returns>The status and datas of the course</returns>
+        public ResultModel<CourseModel> DownloadCourse(CourseModel course)
+        {
+            _consoleService.Log(LogType.BeginCourse, $"Start to download the course '{course.Title}'");
+
+            var folders = _courseFolderService.CreateFolders(course);
+
+            var downloadStatus = _courseVideoService.DownloadCourse(course, folders);
+
+            var transcripts = course.Modules.SelectMany(m => m.Clips.SelectMany(c => c.Transcripts));
+            //var downloadTranscriptsStatus = _courseTranscriptService.Download(transcripts, folders);
+
+            _consoleService.Log(LogType.EndCourse, $"End of download of the course '{course.Title}'");
+
+            return new ResultModel<CourseModel> { Data = course, Ok = true };
         }
 
         /// <summary>

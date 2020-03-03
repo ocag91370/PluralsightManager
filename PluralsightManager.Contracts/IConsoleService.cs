@@ -5,6 +5,8 @@ namespace PluralsightManager.Contracts
 {
     public enum LogType
     {
+        BeginCourse,
+        EndCourse,
         Begin,
         End,
         Error,

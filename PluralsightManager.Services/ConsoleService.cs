@@ -20,6 +20,14 @@ namespace PluralsightManager.Services
         {
             switch (logType)
             {
+                case LogType.BeginCourse:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+
+                case LogType.EndCourse:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+
                 case LogType.Begin:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
