@@ -26,6 +26,6 @@ namespace PluralsightManager.Repositories.Entities
 
         public virtual ModuleEntity Module { get; set; }
 
-        public virtual ICollection<ClipTranscriptEntity> Transcripts { get; set; }
+        public virtual ICollection<TranscriptEntity> Transcripts { get; set; }
     }
 }

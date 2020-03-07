@@ -28,7 +28,7 @@ namespace PluralsightManager.Repositories
                 .HasMany(t => t.Transcripts);
 
             modelBuilder
-                .Entity<ClipTranscriptEntity>()
+                .Entity<TranscriptEntity>()
                 .ToTable("ClipTranscript");
         }
     }

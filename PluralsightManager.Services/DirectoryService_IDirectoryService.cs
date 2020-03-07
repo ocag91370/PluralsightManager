@@ -22,7 +22,7 @@ namespace PluralsightManager.Services
             {
                 Directory.CreateDirectory(path);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 var security = Directory.GetAccessControl(path);
                 security.AddAccessRule(new FileSystemAccessRule(@"Domain\Olivier", FileSystemRights.FullControl, AccessControlType.Allow));

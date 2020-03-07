@@ -14,54 +14,54 @@ namespace PluralsightManager.Services
 {
     public partial class CourseVideoService : ICourseVideoService
     {
-        public bool DownloadCourse(CourseModel course, List<FolderModel> folders)
+        public bool Download(CourseModel course, List<FolderModel> folders)
         {
             var result = true;
 
             var orderedModules = course.Modules.OrderBy(m => m.Index);
-            Parallel.ForEach(orderedModules, module => DownloadModule(module, folders.Where(folder => folder.ModuleName == module.Name).ToList()));
+            Parallel.ForEach(orderedModules, module => Download(module, folders.Where(folder => folder.ModuleName == module.Name).ToList()));
 
             return result;
         }
 
-        public bool DownloadModule(ModuleModel module, List<FolderModel> folders)
+        public bool Download(ModuleModel module, List<FolderModel> folders)
         {
             var result = true;
 
             var orderedClips = module.Clips.OrderBy(c => c.Index);
-            Parallel.ForEach(orderedClips, clip => DownloadClip(clip, folders.FirstOrDefault(folder => folder.ClipName == clip.Name)));
+            Parallel.ForEach(orderedClips, clip => Download(clip, folders.FirstOrDefault(folder => folder.ClipName == clip.Name)));
 
             return result;
         }
 
-        public bool DownloadClip(ClipModel clip, FolderModel folder)
+        public bool Download(ClipModel clip, FolderModel folder)
         {
-            var inputPath = Path.Combine(_configuration.InputPath, _configuration.VideoFolder, folder.Input.Folder, folder.Input.Filename);
-            var outputPath = Path.Combine(_configuration.OutputPath, folder.Output.Folder, $"{folder.Output.Filename}{ _configuration.VideoFileExtension}");
+            var inputFile = Path.Combine(_configuration.InputPath, _configuration.VideoFolder, folder.Input.Folder, folder.Input.Filename);
+            var outputFile = Path.Combine(_configuration.OutputPath, folder.Output.Folder, $"{folder.Output.Filename}{ _configuration.VideoFileExtension}");
 
-            if (!File.Exists(inputPath))
+            if (!File.Exists(inputFile))
             {
-                _consoleService.Log(LogType.Warning, $"File '{inputPath}' cannot be found");
+                _consoleService.Log(LogType.Warning, $"Video file '{inputFile}' cannot be found");
                 return false;
             }
 
-            _consoleService.Log(LogType.Begin, $"Start to download File '{inputPath}'");
+            _consoleService.Log(LogType.Begin, $"Start to download video file '{inputFile}'");
 
             try
             {
-                var iStream = ExtractVideo(inputPath);
-                var video = DecryptVideo(iStream);
-                var status = SaveVideo(video, outputPath);
+                var iStream = Extract(inputFile);
+                var video = Decrypt(iStream);
+                var status = Save(video, outputFile);
+
+                _consoleService.Log(LogType.End, $"Video file '{outputFile}' downloaded successfully");
+
+                return status;
             }
             catch
             {
-                _consoleService.Log(LogType.End, $"File '{outputPath}' download failed");
+                _consoleService.Log(LogType.End, $"Video file '{outputFile}' download failed");
                 return false;
             }
-
-            _consoleService.Log(LogType.End, $"File '{outputPath}' downloaded successfully");
-
-            return true;
         }
     }
 }

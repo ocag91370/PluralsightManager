@@ -26,14 +26,7 @@ namespace PluralsightManager.Services
             _consoleService = consoleService;
         }
 
-        private string ModuleHash(string moduleName, string moduleAuthorName)
-        {
-            string s = moduleName + "|" + moduleAuthorName;
-            using (var md5 = MD5.Create())
-                return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace('/', '_');
-        }
-
-        private IStream ExtractVideo(string inputPath)
+        private IStream Extract(string inputPath)
         {
             try
             {
@@ -50,7 +43,7 @@ namespace PluralsightManager.Services
             }
         }
 
-        private byte[] DecryptVideo(IStream curStream)
+        private byte[] Decrypt(IStream curStream)
         {
             try
             {
@@ -70,7 +63,7 @@ namespace PluralsightManager.Services
             }
         }
 
-        private bool SaveVideo(byte[] video, string outputPath)
+        private bool Save(byte[] video, string outputPath)
         {
             try
             {

@@ -13,33 +13,32 @@ namespace DecryptPluralSightVideos.Encryption
 {
     internal class VirtualFileCache : IDisposable
     {
-        private readonly IPsStream encryptedVideoFile;
-        private Task ReadingTask;
+        private readonly IPsStream _encryptedVideoFile;
 
         public long Length
         {
             get
             {
-                return this.encryptedVideoFile.Length;
+                return _encryptedVideoFile.Length;
             }
         }
 
         public VirtualFileCache(string encryptedVideoFilePath)
         {
-            this.encryptedVideoFile = (IPsStream)new PsStream(encryptedVideoFilePath);
+            _encryptedVideoFile = (IPsStream)new PsStream(encryptedVideoFilePath);
         }
 
         public VirtualFileCache(IPsStream stream)
         {
-            this.encryptedVideoFile = stream;
+            _encryptedVideoFile = stream;
         }
 
         public void Read(byte[] pv, int offset, int count, IntPtr pcbRead)
         {
-            if (this.Length == 0L)
+            if (Length == 0L)
                 return;
-            this.encryptedVideoFile.Seek(offset, SeekOrigin.Begin);
-            int length = this.encryptedVideoFile.Read(pv, 0, count);
+            _encryptedVideoFile.Seek(offset, SeekOrigin.Begin);
+            int length = _encryptedVideoFile.Read(pv, 0, count);
             VideoEncryption.XorBuffer(pv, length, (long)offset);
             if (!(IntPtr.Zero != pcbRead))
                 return;

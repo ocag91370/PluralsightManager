@@ -129,11 +129,6 @@ namespace PluralsightManager.Services
             return _directoryService.Delete(coursePath);
         }
 
-        private string GetOutputCoursePath(CourseModel courseModel)
-        {
-            return Path.Combine(_configuration.OutputPath, courseModel.Title);
-        }
-
         private string GetOutputCoursePath(string courseFolder)
         {
             return Path.Combine(_configuration.OutputPath, courseFolder);

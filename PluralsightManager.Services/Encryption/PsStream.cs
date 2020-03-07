@@ -11,46 +11,31 @@ namespace DecryptPluralSightVideos.Encryption
     public class PsStream : IPsStream
     {
         private readonly Stream fileStream;
-        private long _length;
 
-        public long Length
-        {
-            get
-            {
-                return this._length;
-            }
-        }
-
-        public int BlockSize
-        {
-            get
-            {
-                return 262144;
-            }
-        }
+        public long Length { get; private set; }
 
         public PsStream(string filenamePath)
         {
-            this.fileStream = (Stream)File.Open(filenamePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            this._length = new FileInfo(filenamePath).Length;
+            fileStream = (Stream)File.Open(filenamePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Length = new FileInfo(filenamePath).Length;
         }
 
         public void Seek(int offset, SeekOrigin begin)
         {
-            if (this._length <= 0L)
+            if (Length <= 0L)
                 return;
-            this.fileStream.Seek((long)offset, begin);
+            fileStream.Seek((long)offset, begin);
         }
 
         public int Read(byte[] pv, int i, int count)
         {
-            return this._length <= 0L ? 0 : this.fileStream.Read(pv, i, count);
+            return Length <= 0L ? 0 : fileStream.Read(pv, i, count);
         }
 
         public void Dispose()
         {
-            this._length = 0L;
-            this.fileStream.Dispose();
+            Length = 0L;
+            fileStream.Dispose();
         }
     }
 }

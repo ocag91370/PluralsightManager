@@ -13,32 +13,32 @@ namespace DecryptPluralSightVideos.Encryption
 {
     internal class VirtualFileStream : IStream, IDisposable
     {
-        private readonly object _Lock = new object();
+        private readonly object _lock = new object();
         private long position;
-        private VirtualFileCache _Cache;
+        private readonly VirtualFileCache _cache;
 
         public VirtualFileStream(string EncryptedVideoFilePath)
         {
-            this._Cache = new VirtualFileCache(EncryptedVideoFilePath);
+            _cache = new VirtualFileCache(EncryptedVideoFilePath);
         }
 
         private VirtualFileStream(VirtualFileCache Cache)
         {
-            this._Cache = Cache;
+            _cache = Cache;
         }
 
         public void Read(byte[] pv, int cb, IntPtr pcbRead)
         {
-            if (this.position < 0L || this.position > this._Cache.Length)
+            if (position < 0L || position > _cache.Length)
             {
                 Marshal.WriteIntPtr(pcbRead, new IntPtr(0));
             }
             else
             {
-                lock (this._Lock)
+                lock (_lock)
                 {
-                    this._Cache.Read(pv, (int)this.position, cb, pcbRead);
-                    this.position += pcbRead.ToInt64();
+                    _cache.Read(pv, (int)position, cb, pcbRead);
+                    position += pcbRead.ToInt64();
                 }
             }
         }
@@ -51,23 +51,23 @@ namespace DecryptPluralSightVideos.Encryption
         public void Seek(long dlibMove, int dwOrigin, IntPtr plibNewPosition)
         {
             SeekOrigin seekOrigin = (SeekOrigin)dwOrigin;
-            lock (this._Lock)
+            lock (_lock)
             {
                 switch (seekOrigin)
                 {
                     case SeekOrigin.Begin:
-                        this.position = dlibMove;
+                        position = dlibMove;
                         break;
                     case SeekOrigin.Current:
-                        this.position += dlibMove;
+                        position += dlibMove;
                         break;
                     case SeekOrigin.End:
-                        this.position = this._Cache.Length + dlibMove;
+                        position = _cache.Length + dlibMove;
                         break;
                 }
                 if (!(IntPtr.Zero != plibNewPosition))
                     return;
-                Marshal.WriteInt64(plibNewPosition, this.position);
+                Marshal.WriteInt64(plibNewPosition, position);
             }
         }
 
@@ -103,18 +103,17 @@ namespace DecryptPluralSightVideos.Encryption
 
         public void Stat(out System.Runtime.InteropServices.ComTypes.STATSTG pstatstg, int grfStatFlag)
         {
-            pstatstg = new System.Runtime.InteropServices.ComTypes.STATSTG();
-            pstatstg.cbSize = this._Cache.Length;
+            pstatstg = new System.Runtime.InteropServices.ComTypes.STATSTG() { cbSize = _cache.Length };
         }
 
         public void Clone(out IStream ppstm)
         {
-            ppstm = (IStream)new VirtualFileStream(this._Cache);
+            ppstm = (IStream)new VirtualFileStream(_cache);
         }
 
         public void Dispose()
         {
-            this._Cache.Dispose();
+            _cache.Dispose();
         }
     }
 }

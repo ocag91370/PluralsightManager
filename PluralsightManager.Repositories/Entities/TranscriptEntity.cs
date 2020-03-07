@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace PluralsightManager.Repositories.Entities
 {
-    public class ClipTranscriptEntity
+    public class TranscriptEntity
     {
         [Key]
         public double Id { get; set; }

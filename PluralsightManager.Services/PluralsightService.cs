@@ -78,10 +78,9 @@ namespace PluralsightManager.Services
 
             var folders = _courseFolderService.CreateFolders(course);
 
-            var downloadStatus = _courseVideoService.DownloadCourse(course, folders);
+            var videoStatus = _courseVideoService.Download(course, folders);
 
-            var transcripts = course.Modules.SelectMany(m => m.Clips.SelectMany(c => c.Transcripts));
-            //var downloadTranscriptsStatus = _courseTranscriptService.Download(transcripts, folders);
+            var transcriptsStatus = _courseTranscriptService.Download(course, folders);
 
             VerifyCourseDownload(course);
 

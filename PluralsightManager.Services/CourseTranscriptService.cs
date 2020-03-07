@@ -24,39 +24,29 @@ namespace PluralsightManager.Services
             _consoleService = consoleService;
         }
 
-        private IStream ExtractVideo(string inputPath)
+        private bool ExtractAndSave(List<TranscriptModel> transcripts, string outputFile)
         {
             try
             {
-                var playingFileStream = new VirtualFileStream(inputPath);
-                playingFileStream.Clone(out var curStream);
+                int num = 1;
 
-                return curStream;
-            }
-            catch (Exception ex)
-            {
-                _consoleService.Log(LogType.Error, $"An error occured during the extraction of the video : {ex.Message}");
+                StreamWriter streamWriter = new StreamWriter(outputFile);
 
-                return null;
-            }
-        }
+                foreach (var transcript in transcripts)
+                {
+                    streamWriter.WriteLine(num++);
+                    streamWriter.WriteLine($"{transcript.StartTime.ToString("hh\\:mm\\:ss\\,fff")} --> {transcript.EndTime.ToString("hh\\:mm\\:ss\\,fff")}");
+                    streamWriter.WriteLine(transcript.Text);
+                    streamWriter.WriteLine();
+                }
 
-        private bool DecryptVideo(IStream curStream, string outputPath)
-        {
-            try
-            {
-                curStream.Stat(out var pstatstg, 0);
-                IntPtr pcbRead = (IntPtr)0;
-                int cbSize = (int)pstatstg.cbSize;
-                byte[] numArray = new byte[cbSize];
-                curStream.Read(numArray, cbSize, pcbRead);
-                File.WriteAllBytes(outputPath, numArray);
+                streamWriter.Close();
 
                 return true;
             }
             catch (Exception ex)
             {
-                _consoleService.Log(LogType.Error, $"An error occured during the decryption of the video : {ex.Message}");
+                _consoleService.Log(LogType.Error, $"An error occured during the extraction of the transcript : {ex.Message}");
 
                 return false;
             }
