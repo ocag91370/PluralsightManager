@@ -39,6 +39,8 @@ namespace PluralsightManager.Services
         /// <returns>The status and datas of the course</returns>
         public ResultModel<List<CourseModel>> DownloadAllCourses()
         {
+            _courseFolderService.DeleteOutputFolder();
+
             var coursesResult = _pluralsightRepository
             .GetAllCourses()
             .ToList()
@@ -72,12 +74,16 @@ namespace PluralsightManager.Services
         {
             _consoleService.Log(LogType.BeginCourse, $"Start to download the course '{course.Title}'");
 
+            _courseFolderService.DeleteFolder(course);
+
             var folders = _courseFolderService.CreateFolders(course);
 
             var downloadStatus = _courseVideoService.DownloadCourse(course, folders);
 
             var transcripts = course.Modules.SelectMany(m => m.Clips.SelectMany(c => c.Transcripts));
             //var downloadTranscriptsStatus = _courseTranscriptService.Download(transcripts, folders);
+
+            VerifyCourseDownload(course);
 
             _consoleService.Log(LogType.EndCourse, $"End of download of the course '{course.Title}'");
 
@@ -151,6 +157,17 @@ namespace PluralsightManager.Services
                             .Where(o => o.ModuleId == moduleId);
 
             return result;
+        }
+
+        private void VerifyCourseDownload(CourseModel course)
+        {
+            var nbClips = course.Modules.Sum(m => m.Clips.Count());
+            var nbFiles = _courseFolderService.GetNbClipFiles(course);
+
+            if (nbFiles < nbClips)
+                _consoleService.Log(LogType.Error, $"Missing clip(s) after the download of the course '{course.Title}' : {nbClips - nbFiles} files");
+
+            _consoleService.Log(LogType.Done, $"Status of the download of the course '{course.Title}' : [{nbClips} clips, {nbFiles} files]");
         }
     }
 }

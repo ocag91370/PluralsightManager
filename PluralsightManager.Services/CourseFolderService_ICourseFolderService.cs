@@ -24,9 +24,41 @@ namespace PluralsightManager.Services
         public List<FolderModel> CreateFolders(CourseModel courseModel)
         {
             var folders = ComputeFolders(courseModel);
-            CreateFolders(courseModel.Title, folders);
+            CreateFolders(folders);
 
             return folders;
+        }
+
+        /// <summary>
+        /// Delete all the folders of a course
+        /// </summary>
+        /// <param name="courseModel">The course model</param>
+        /// <returns>The status</returns>
+        public bool DeleteFolder(CourseModel courseModel)
+        {
+            return DeleteFolder(courseModel.Title);
+        }
+
+        /// <summary>
+        /// Delete all the folders
+        /// </summary>
+        /// <returns>The status</returns>
+        public bool DeleteOutputFolder()
+        {
+            return _directoryService.Delete(_configuration.OutputPath);
+        }
+
+        /// <summary>
+        /// Get the number of files in a course folder
+        /// </summary>
+        /// <param name="courseModel">The course model</param>
+        /// <returns>Number of files</returns>
+        public int GetNbClipFiles(CourseModel courseModel)
+        {
+            var path = GetOutputCoursePath(courseModel.Title);
+            var pattern = $"*{_configuration.VideoFileExtension}";
+
+            return _directoryService.GetNbFiles(path, pattern);
         }
     }
 }

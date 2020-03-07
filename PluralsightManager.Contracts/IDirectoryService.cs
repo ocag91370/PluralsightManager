@@ -7,8 +7,10 @@ namespace PluralsightManager.Contracts
     {
         bool Create(string path);
 
-        void Delete(string path);
+        bool Delete(string path);
 
         string CleanFolderName(string folder);
+
+        int GetNbFiles(string path, string pattern);
     }
 }

@@ -9,9 +9,12 @@ namespace PluralsightManager.Services
     {
         private readonly List<char> _invalidCharacters = new List<char>();
         private readonly char _substituteCharacter = '-';
+        private readonly IConsoleService _consoleService;
 
-        public DirectoryService()
+        public DirectoryService(IConsoleService consoleService)
         {
+            _consoleService = consoleService;
+
             _invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidPathChars());
             _invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidFileNameChars());
             _invalidCharacters.AddRange((IEnumerable<char>)new char[] { ':', '?', '"', '\\', '/' });

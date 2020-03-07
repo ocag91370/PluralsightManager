@@ -9,44 +9,66 @@ namespace PluralsightManager.Services
 {
     public class ConsoleService : IConsoleService
     {
-        private readonly ConsoleColor _color_default;
+        private readonly ConsoleColor _foregroundColor;
+        private readonly ConsoleColor _backgroundColor;
 
         public ConsoleService()
         {
-            _color_default = Console.ForegroundColor;
+            _foregroundColor = ConsoleColor.White;
+            _backgroundColor = ConsoleColor.Black;
         }
 
         public void Log(LogType logType, string message)
         {
+            var backgroundColor = _backgroundColor;
+            var foregroundColor = _foregroundColor;
+
             switch (logType)
             {
                 case LogType.BeginCourse:
-                    Console.ForegroundColor = ConsoleColor.White;
+                    backgroundColor = ConsoleColor.Yellow;
+                    foregroundColor = ConsoleColor.Black;
                     break;
 
                 case LogType.EndCourse:
-                    Console.ForegroundColor = ConsoleColor.White;
+                    backgroundColor = ConsoleColor.Green;
+                    foregroundColor = ConsoleColor.Black;
                     break;
 
                 case LogType.Begin:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    foregroundColor = ConsoleColor.Yellow;
                     break;
 
                 case LogType.End:
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    foregroundColor = ConsoleColor.Green;
                     break;
 
                 case LogType.Warning:
-                    Console.ForegroundColor = ConsoleColor.Gray;
+                    backgroundColor = ConsoleColor.Gray;
+                    foregroundColor = ConsoleColor.Black;
                     break;
 
                 case LogType.Error:
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    backgroundColor = ConsoleColor.Red;
+                    foregroundColor = ConsoleColor.White;
+                    break;
+
+                case LogType.Done:
+                    foregroundColor = ConsoleColor.White;
+                    break;
+
+                case LogType.Info:
+                    foregroundColor = ConsoleColor.White;
                     break;
             }
 
+            Console.BackgroundColor = backgroundColor;
+            Console.ForegroundColor = foregroundColor;
+
             Console.WriteLine(message);
-            Console.ForegroundColor = _color_default;
+
+            Console.BackgroundColor= _backgroundColor;
+            Console.ForegroundColor = _foregroundColor;
         }
     }
 }

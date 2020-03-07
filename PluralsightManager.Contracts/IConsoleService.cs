@@ -10,7 +10,9 @@ namespace PluralsightManager.Contracts
         Begin,
         End,
         Error,
-        Warning
+        Warning,
+        Done,
+        Info
     }
 
     public interface IConsoleService
