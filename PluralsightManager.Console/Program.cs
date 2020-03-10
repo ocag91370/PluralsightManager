@@ -26,8 +26,8 @@ namespace PluralsightManager.Console
 
             var pluralsightService = Container.Resolve<IPluralsightService>();
 
-            pluralsightService.DownloadCourse("10ec35af-2ed3-414e-aba8-8d2a907e2841");
-            //pluralsightService.DownloadAllCourses();
+            //pluralsightService.DownloadCourse("10ec35af-2ed3-414e-aba8-8d2a907e2841");
+            pluralsightService.DownloadAllCourses();
         }
 
         static void RegisterAutofac()
