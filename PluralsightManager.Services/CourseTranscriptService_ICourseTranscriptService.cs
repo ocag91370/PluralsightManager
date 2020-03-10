@@ -16,37 +16,34 @@ namespace PluralsightManager.Services
     {
         public bool Download(CourseModel course, List<FolderModel> folders)
         {
-            var result = true;
+            if (!course.HasTranscript)
+                return false;
 
             var orderedModules = course.Modules.OrderBy(m => m.Index);
             Parallel.ForEach(orderedModules, module => Download(module, folders.Where(folder => folder.ModuleName == module.Name).ToList()));
 
-            return result;
+            return true;
         }
 
         public bool Download(ModuleModel module, List<FolderModel> folders)
         {
-            var result = true;
-
             var orderedClips = module.Clips.OrderBy(c => c.Index);
             Parallel.ForEach(orderedClips, clip => Download(clip, folders.FirstOrDefault(folder => folder.ClipName == clip.Name)));
 
-            return result;
+            return true;
         }
 
         public bool Download(ClipModel clip, FolderModel folder)
         {
-            var result = true;
-
             var orderedTrancripts = clip.Transcripts.OrderBy(t => t.StartTime).ToList();
             Download(orderedTrancripts, folder);
 
-            return result;
+            return true;
         }
 
         public bool Download(List<TranscriptModel> transcripts, FolderModel folder)
         {
-            var outputFile = Path.Combine(_configuration.OutputPath, folder.Output.Folder, $"{folder.Output.Filename}{ _configuration.TranscriptFileExtension}");
+            var outputFile = Path.Combine(folder.Output.Path, $"{folder.Output.Filename}{ _configuration.TranscriptFileExtension}");
 
             if (! transcripts.Any())
             {

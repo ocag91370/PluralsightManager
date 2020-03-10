@@ -55,7 +55,7 @@ namespace PluralsightManager.Services
         /// <returns>Number of files</returns>
         public int GetNbClipFiles(CourseModel courseModel)
         {
-            var path = GetOutputCoursePath(courseModel.Title);
+            var path = GetCourseOutputPath(courseModel.Title);
             var pattern = $"*{_configuration.VideoFileExtension}";
 
             return _directoryService.GetNbFiles(path, pattern);

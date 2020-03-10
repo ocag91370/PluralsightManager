@@ -8,7 +8,7 @@ namespace PluralsightManager.Services
     public partial class DirectoryService : IDirectoryService
     {
         private readonly List<char> _invalidCharacters = new List<char>();
-        private readonly char _substituteCharacter = '-';
+        private readonly string _substituteValue = string.Empty;
         private readonly IConsoleService _consoleService;
 
         public DirectoryService(IConsoleService consoleService)

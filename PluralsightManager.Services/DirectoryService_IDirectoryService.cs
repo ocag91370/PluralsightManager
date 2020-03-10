@@ -104,15 +104,11 @@ namespace PluralsightManager.Services
 
         public string CleanFolderName(string folder)
         {
-            var invalidCharacters = new List<char> { ':', '?', '"', '\\', '/' };
-            invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidPathChars());
-            invalidCharacters.AddRange((IEnumerable<char>)Path.GetInvalidFileNameChars());
-
             var result = new StringBuilder(folder);
 
-            foreach (var character in invalidCharacters)
+            foreach (var character in _invalidCharacters)
             {
-                result = result.Replace(character, _substituteCharacter);
+                result = result.Replace(character.ToString(), _substituteValue);
             }
 
             return result.ToString();

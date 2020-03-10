@@ -40,53 +40,27 @@ namespace PluralsightManager.Services
         {
             var result = new List<FolderModel>();
 
-            var courseFolder = _directoryService.CleanFolderName(course.Title);
-            string coursePath = GetOutputCoursePath(courseFolder);
-
-            int modulePadding = course.Modules.Count.ToString().Length;
-            int clipPadding = course.Modules.Max(module => module.Clips.Count).ToString().Length;
-
             foreach (var module in course.Modules)
             {
-                var moduleIndex = (module.Index + 1).ToString().PadLeft(modulePadding, '0');
-                string moduleFolder = _directoryService.CleanFolderName($"{moduleIndex} - {module.Title}");
-
-                var outputFolder = Path.Combine(courseFolder, moduleFolder);
-                //if (outputFolder.Length >= _folderLimit)
-                //{
-                //    var delta = _folderLimit - outputFolder.Length - _fileExtensionLength;
-                //    outputFolder = $"{outputFolder.Substring(0, outputFolder.Length - delta)}__";
-                //}
+                var inputPath = GetModuleInputPath(course, module);
+                var outputPath = GetModuleOutputPath(course, module);
 
                 foreach (var clip in module.Clips)
                 {
-                    var clipIndex = (clip.Index + 1).ToString().PadLeft(clipPadding, '0');
-
-                    var outputFilename = _directoryService.CleanFolderName($"{clipIndex} - {clip.Title}");
-                    var filename = Path.Combine(_configuration.OutputPath, outputFolder, outputFilename);
-                    var length = filename.Length + Math.Max(_configuration.VideoFileExtension.Length, _configuration.TranscriptFileExtension.Length);
-
-                    if (length >= _folderLimit)
-                    {
-                        var delta = length - _folderLimit;
-                        outputFilename = $"{outputFilename.Substring(0, outputFilename.Length - delta)}__";
-                    }
+                    var inputFilename = GetClipInputFilename(course, module, clip);
+                    var outputFilename = GetClipOutputFilename(course, module, clip);
 
                     result.Add(new FolderModel
                     {
                         CourseName = course.Name,
                         ModuleName = module.Name,
                         ClipName = clip.Name,
-                        Input = new FileModel
-                        {
-                            Folder = Path.Combine(course.Name, ModuleHash(module.Name, module.AuthorHandle)),
-                            Filename = $"{clip.Name}.psv"
+                        Input = new FileModel {
+                            Path = inputPath,
+                            Filename = inputFilename
                         },
-                        Output = new FileModel
-                        {
-                            //Folder = Path.Combine(courseFolder, moduleFolder),
-                            //Filename = _directoryService.CleanFolderName($"{clipIndex.ToString().PadLeft(clipPadding, '0')} - {clip.Title}")
-                            Folder = outputFolder,
+                        Output = new FileModel {
+                            Path = outputPath,
                             Filename = outputFilename
                         }
                     });
@@ -100,7 +74,7 @@ namespace PluralsightManager.Services
         {
             foreach (var folder in folders)
             {
-                var modulePath = Path.Combine(_configuration.OutputPath, folder.Output.Folder);
+                var modulePath = folder.Output.Path;
 
                 // Create the module folder
                 try
@@ -121,17 +95,68 @@ namespace PluralsightManager.Services
             return true;
         }
 
+        private string GetModuleInputPath(CourseModel course, ModuleModel module)
+        {
+            var path = Path.Combine(_configuration.InputPath, _configuration.VideoFolder, course.Name, ModuleHash(module.Name, module.AuthorHandle));
+
+            return path;
+        }
+
+        private string GetClipInputFilename(CourseModel course, ModuleModel module, ClipModel clip)
+        {
+            var filename = $"{clip.Name}.psv";
+
+            return filename;
+        }
+
         private bool DeleteFolder(string courseFolder)
         {
-            string coursePath = GetOutputCoursePath(courseFolder);
+            string coursePath = GetCourseOutputPath(courseFolder);
 
             // Delete the course, if exists
             return _directoryService.Delete(coursePath);
         }
 
-        private string GetOutputCoursePath(string courseFolder)
+        private string GetCourseOutputPath(CourseModel course)
         {
-            return Path.Combine(_configuration.OutputPath, courseFolder);
+            return GetCourseOutputPath(course.Title);
+        }
+
+        private string GetCourseOutputPath(string courseFolder)
+        {
+            var folder = _directoryService.CleanFolderName(courseFolder);
+            var path = Path.Combine(_configuration.OutputPath, folder);
+
+            return path;
+        }
+
+        private string GetModuleOutputPath(CourseModel course, ModuleModel module)
+        {
+            var paddingLength = course.Modules.Count.ToString().Length;
+            var index = (module.Index + 1).ToString().PadLeft(paddingLength, '0');
+            string folder = _directoryService.CleanFolderName($"{index} - {module.Title}");
+
+            var path = Path.Combine(GetCourseOutputPath(course), folder);
+
+            return path;
+        }
+
+        private string GetClipOutputFilename(CourseModel course, ModuleModel module, ClipModel clip)
+        {
+            int paddingLength = course.Modules.Max(m => m.Clips.Count).ToString().Length;
+            var index = (clip.Index + 1).ToString().PadLeft(paddingLength, '0');
+
+            var filename = _directoryService.CleanFolderName($"{index} - {clip.Title}");
+
+            var path = Path.Combine(GetModuleOutputPath(course, module), filename);
+            var length = path.Length + Math.Max(_configuration.VideoFileExtension.Length, _configuration.TranscriptFileExtension.Length);
+            if (length >= _folderLimit)
+            {
+                var delta = length - _folderLimit;
+                filename = $"{filename.Substring(0, filename.Length - delta)}__";
+            }
+
+            return filename;
         }
     }
 }

@@ -36,8 +36,8 @@ namespace PluralsightManager.Services
 
         public bool Download(ClipModel clip, FolderModel folder)
         {
-            var inputFile = Path.Combine(_configuration.InputPath, _configuration.VideoFolder, folder.Input.Folder, folder.Input.Filename);
-            var outputFile = Path.Combine(_configuration.OutputPath, folder.Output.Folder, $"{folder.Output.Filename}{ _configuration.VideoFileExtension}");
+            var inputFile = Path.Combine(folder.Input.Path, folder.Input.Filename);
+            var outputFile = Path.Combine(folder.Output.Path, $"{folder.Output.Filename}{ _configuration.VideoFileExtension}");
 
             if (!File.Exists(inputFile))
             {
