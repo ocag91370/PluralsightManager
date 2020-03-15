@@ -7,7 +7,9 @@ namespace PluralsightManager.Contracts
     {
         ResultModel<List<CourseModel>> DownloadAllCourses();
 
-        ResultModel<CourseModel> DownloadCourse(string courseId);
+        ResultModel<CourseModel> DownloadCourseById(string courseId);
+
+        ResultModel<CourseModel> DownloadCourseByTag(string courseTag);
 
         IEnumerable<CourseModel> GetAllCourses();
     }

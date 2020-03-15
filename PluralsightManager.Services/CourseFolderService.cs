@@ -16,6 +16,8 @@ namespace PluralsightManager.Services
 {
     public partial class CourseFolderService : ICourseFolderService
     {
+        private readonly char _paddingCharacter = '0';
+        private readonly int _defaultPaddingMLength = 2;
         private readonly int _folderLimit = 260;
         private readonly PluralsightConfiguration _configuration;
         private readonly IDirectoryService _directoryService;
@@ -132,8 +134,8 @@ namespace PluralsightManager.Services
 
         private string GetModuleOutputPath(CourseModel course, ModuleModel module)
         {
-            var paddingLength = course.Modules.Count.ToString().Length;
-            var index = (module.Index + 1).ToString().PadLeft(paddingLength, '0');
+            var paddingLength = Math.Max(course.Modules.Count.ToString().Length, _defaultPaddingMLength);
+            var index = (module.Index + 1).ToString().PadLeft(paddingLength, _paddingCharacter);
             string folder = _directoryService.CleanFolderName($"{index} - {module.Title}");
 
             var path = Path.Combine(GetCourseOutputPath(course), folder);
@@ -143,8 +145,8 @@ namespace PluralsightManager.Services
 
         private string GetClipOutputFilename(CourseModel course, ModuleModel module, ClipModel clip)
         {
-            int paddingLength = course.Modules.Max(m => m.Clips.Count).ToString().Length;
-            var index = (clip.Index + 1).ToString().PadLeft(paddingLength, '0');
+            int paddingLength = Math.Max(course.Modules.Max(m => m.Clips.Count).ToString().Length, _defaultPaddingMLength);
+            var index = (clip.Index + 1).ToString().PadLeft(paddingLength, _paddingCharacter);
 
             var filename = _directoryService.CleanFolderName($"{index} - {clip.Title}");
 

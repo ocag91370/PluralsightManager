@@ -56,10 +56,24 @@ namespace PluralsightManager.Services
         /// </summary>
         /// <param name="courseId">Id of the course</param>
         /// <returns>The status and datas of the course</returns>
-        public ResultModel<CourseModel> DownloadCourse(string courseId)
+        public ResultModel<CourseModel> DownloadCourseById(string courseId)
         {
             var courseResult = _pluralsightRepository
-                .GetCourse(courseId)
+                .GetCourseById(courseId)
+                .Map<CourseEntity, CourseModel>();
+
+            return DownloadCourse(courseResult.Data);
+        }
+
+        /// <summary>
+        /// Download a course
+        /// </summary>
+        /// <param name="courseTag">Tag of the course</param>
+        /// <returns>The status and datas of the course</returns>
+        public ResultModel<CourseModel> DownloadCourseByTag(string courseTag)
+        {
+            var courseResult = _pluralsightRepository
+                .GetCourseByTag(courseTag)
                 .Map<CourseEntity, CourseModel>();
 
             return DownloadCourse(courseResult.Data);
@@ -97,7 +111,7 @@ namespace PluralsightManager.Services
         public ResultModel<CourseModel> GetCourse(string courseId)
         {
             var result = _pluralsightRepository
-                            .GetCourse(courseId)
+                            .GetCourseById(courseId)
                             .Map<CourseEntity, CourseModel>();
 
             return result;

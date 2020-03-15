@@ -37,9 +37,23 @@ namespace PluralsightManager.Repositories
         /// </summary>
         /// <param name="courseId">Id of the course</param>
         /// <returns>The requested course</returns>
-        public CourseEntity GetCourse(string courseId)
+        public CourseEntity GetCourseById(string courseId)
         {
             var result = _dbRepository.Get<CourseEntity>(courseId);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a specific course
+        /// </summary>
+        /// <param name="courseTag">Tag of the course</param>
+        /// <returns>The requested course</returns>
+        public CourseEntity GetCourseByTag(string courseTag)
+        {
+            var courses = _dbRepository.GetAll<CourseEntity>(true);
+            
+            var result = courses.Where(c => c.UrlSlug == courseTag).FirstOrDefault();
 
             return result;
         }

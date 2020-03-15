@@ -26,8 +26,19 @@ namespace PluralsightManager.Console
 
             var pluralsightService = Container.Resolve<IPluralsightService>();
 
-            //pluralsightService.DownloadCourse("10ec35af-2ed3-414e-aba8-8d2a907e2841");
-            pluralsightService.DownloadAllCourses();
+            // Microservices Fundamentals
+            //pluralsightService.DownloadCourseByTag("microservices-fundamentals");
+
+            // Go: Getting Started
+            //pluralsightService.DownloadCourseByTag("getting-started-with-go");
+
+            // Mocking with Moq and NUnit
+            //pluralsightService.DownloadCourseByTag("nunit-moq-mocking");
+
+            // Introduction to .NET Testing with NUnit 3
+            pluralsightService.DownloadCourseByTag("nunit-3-dotnet-testing-introduction");
+
+            //pluralsightService.DownloadAllCourses();
         }
 
         static void RegisterAutofac()
